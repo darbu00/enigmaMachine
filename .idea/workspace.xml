@@ -5,21 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe9414d9-5378-4aba-9329-25e07566d541" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/enigmaMachine.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Encrypt.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Enigma.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/EnigmaMachine.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/EnigmaReader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/EnigmaWriter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Plugboard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Reflector.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RunEnigma.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Wheel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,14 +32,14 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Users/David/Projects/Personal/enigmaMachine",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/David/Projects/Personal/enigmaMachine&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Application.RunEnigma">
     <configuration name="EnigmaMachine" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="EnigmaMachine" />
