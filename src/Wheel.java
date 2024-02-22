@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Wheel {
 
   private char[] cipher;
@@ -80,7 +82,8 @@ public class Wheel {
   @Override
   public String toString() {
     return "Wheel [startOffset=" + startOffset + ", currentWheelPosition=" + currentWheelPosition + ", ringPosition="
-        + ringPosition + "]";
+        + ringPosition + "]\n" +
+        "cipher= " + Arrays.toString(cipher) + "\n";
   }
 
   public Wheel() {

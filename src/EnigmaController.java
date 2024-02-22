@@ -18,10 +18,10 @@ public class EnigmaController {
   private Enigma enigmaMachine;
   private final char[] ALPHABET = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
       'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-  private int[] wheelOrder = { 3, 2, 0 };
-  private int numberOfWheels = 5;
-  private int numberOfPlugs = 6;
-  private boolean defaultEnigma = true;
+  private int[] wheelOrder;
+  private int numberOfWheels;
+  private int numberOfPlugs;
+  private boolean defaultEnigma;
   Scanner kbScanner = new Scanner(System.in);
 
   public void startEnigma() {
@@ -93,9 +93,24 @@ public class EnigmaController {
           break;
 
         case CONFIGURE:
-          displayConfigureMenu(enigmaMachine);
-          getNumericInput();
-
+          ArrayList<Integer> validSelections = displayConfigureMenu(enigmaMachine);
+          int selection = getNumericInput();
+          if (checkMenuSelection(selection, validSelections)) {
+            if (selection == 1) {
+              numberOfWheels = 5;
+              numberOfPlugs = 6;
+              wheelOrder = new int[3];
+              wheelOrder[0] = 3;
+              wheelOrder[1] = 2;
+              wheelOrder[2] = 0;
+              defaultEnigma = true;
+              System.out.println("Standard enigma machine configured");
+            } else if (selection == 2) {
+              displayCustomConfigMenu(enigmaMachine);
+            } else if (selection == 3) {
+              displayChangeConfigMenu(enigmaMachine);
+            }
+          }
           enigmaState = ENIGMA_STATE.DISPLAY_MENU;
           break;
 
@@ -151,8 +166,27 @@ public class EnigmaController {
 
   } // End startEnigma here
 
+  private void displayChangeConfigMenu(Enigma enigmaMachine2) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'displayChangeConfigMenu'");
+  }
+
+  private void displayCustomConfigMenu(Enigma enigmaMachine2) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'displayCustomConfigMenu'");
+  }
+
   private boolean checkMenuSelection(int menuSelection) {
     if (menuSelection >= 1 && menuSelection <= 7) {
+      return true;
+    } else {
+      System.out.println("\n\nINVALID SELECTION!!\n");
+      return false;
+    }
+  }
+
+  private boolean checkMenuSelection(int menuSelection, ArrayList<Integer> validSelections) {
+    if (validSelections.contains(menuSelection)) {
       return true;
     } else {
       System.out.println("\n\nINVALID SELECTION!!\n");
@@ -182,23 +216,32 @@ public class EnigmaController {
     System.out.println("2. Generate New Enigma Machine");
     System.out.println("3. Load Existing Enigma Machine");
     System.out.println("4. Save Enigma Machine Settings");
-    System.out.println("5. Encrypt Text");
+    System.out.println("5. Encrypt or Decrypt Text");
     System.out.println("6. Display Enigma Configuration");
     System.out.println("\n7. Exit");
     System.out.print("\n\nWhat would you like to do? ");
 
   }
 
-  public static void displayConfigureMenu(Enigma enigmaMachine) {
+  public static ArrayList<Integer> displayConfigureMenu(Enigma enigmaMachine) {
+    ArrayList<Integer> validSelections = new ArrayList<Integer>() {
+      {
+        add(1);
+        add(2);
+        add(7);
+      }
+    };
     System.out.println("1. Configure Standard Enigma Machine");
     System.out.println("2. Configure a Non-Standard Enigma Machine");
 
     if (enigmaMachine != null) {
       System.out.println("3. Configure The Existing Enigma Machine");
+      validSelections.add(3);
     }
 
     System.out.println("\n7. Exit");
     System.out.print("\n\nWhat would you like to do? ");
+    return validSelections;
   }
 
   public static void displayLoadMenu() {

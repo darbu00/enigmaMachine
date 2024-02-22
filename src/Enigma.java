@@ -88,6 +88,9 @@ public class Enigma {
       }
     } else {
       // TODO: create non-standard wheels here
+      for (int i = 0; i < numberOfWheels; i++) {
+        this.wheels[i] = new Wheel(0, 0);
+      }
     }
     this.wheels[wheelOrder[0]].setFirstTurnWheel(true);
   }
