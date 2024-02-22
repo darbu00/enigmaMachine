@@ -77,6 +77,12 @@ public class Wheel {
     this.secondTurnWheel = secondTurnWheel;
   }
 
+  @Override
+  public String toString() {
+    return "Wheel [startOffset=" + startOffset + ", currentWheelPosition=" + currentWheelPosition + ", ringPosition="
+        + ringPosition + "]";
+  }
+
   public Wheel() {
     this.cipher = generateCipher();
     // this.cipher = generateCaesarCipher();
@@ -91,8 +97,12 @@ public class Wheel {
     this.secondTurnWheel = false;
   }
 
-  public Wheel(int startOffset, int ringPosition, int wheelNumber, boolean standard) {
-    this.cipher = generateCipher();
+  public Wheel(int startOffset, int ringPosition, int wheelNumber, boolean defaultEnigma) {
+    if (defaultEnigma) {
+      this.cipher = DEFAULT_CIPHER[wheelNumber];
+    } else {
+      this.cipher = generateCipher();
+    }
     this.startOffset = startOffset;
     this.ringPosition = ringPosition;
     this.currentWheelPosition = startOffset;
@@ -140,9 +150,6 @@ public class Wheel {
         }
       }
     }
-
-    // System.out.println("");
-    // System.out.println("Iterations: " + iterations);
 
     return cipher;
   }

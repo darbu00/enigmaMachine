@@ -21,16 +21,11 @@ public class EnigmaController {
   private int[] wheelOrder = { 3, 2, 0 };
   private int numberOfWheels = 5;
   private int numberOfPlugs = 6;
+  private boolean defaultEnigma = true;
   Scanner kbScanner = new Scanner(System.in);
 
   public void startEnigma() {
 
-    // Enigma enigmaMachine = new Enigma(numberOfWheels, wheelOrder, numberOfPlugs);
-
-    // testEncryption(enigmaMachine.getPlugboard(), enigmaMachine.getWheels(),
-    // enigmaMachine.getReflector(), enigmaMachine.getEncryptor(),
-    // enigmaMachine.getWheelOrder());;q
-    //
     ENIGMA_STATE enigmaState = ENIGMA_STATE.STARTUP;
 
     do {
@@ -82,7 +77,14 @@ public class EnigmaController {
 
         case GENERATE:
           if (numberOfWheels != 0) {
-            enigmaMachine = new Enigma(numberOfWheels, wheelOrder, numberOfPlugs);
+
+            // update this and/or Enigma to properly use defaultEnigma
+            //
+            if (defaultEnigma) {
+              enigmaMachine = new Enigma(numberOfWheels, wheelOrder, numberOfPlugs, defaultEnigma);
+            } else {
+              enigmaMachine = new Enigma(numberOfWheels, wheelOrder, numberOfPlugs, defaultEnigma);
+            }
             enigmaState = ENIGMA_STATE.DISPLAY_MENU;
           } else {
             System.out.println("\n\nCONFIGURE YOUR ENIGMA MACHINE FIRST!\n");
@@ -222,7 +224,7 @@ public class EnigmaController {
 
   // This is a test encryption
 
-  public static void testEncryption(Plugboard plugboard, Wheel[] wheels, Reflector reflector, Encrypt encryptor,
+  public void testEncryption(Plugboard plugboard, Wheel[] wheels, Reflector reflector, Encryptor encryptor,
       int[] wheelOrder, ArrayList<String> inputString) {
 
     String testString = "this is my crazy long test message to the Allied commmand asking about Dday.  AAAAAAAAAAAAAAAAAAAAAAAAAAAA";
@@ -275,14 +277,7 @@ public class EnigmaController {
     System.out.println("");
     // Start test decryption
 
-    for (int i = 0; i < wheelOrder.length; i++) {
-      wheels[wheelOrder[i]].resetWheel();
-      if (i == 0) {
-        wheels[wheelOrder[i]].setFirstTurnWheel(true);
-      }
-      // System.out.print("Wheel: " + wheelOrder[i] + " " +
-      // wheels[wheelOrder[i]].getCurrentWheelPosition() + " ");
-    }
+    enigmaMachine.resetWheels();
 
     StringBuilder decryptResult = new StringBuilder();
     for (char dtestChar : resultChar) {
@@ -309,14 +304,7 @@ public class EnigmaController {
     }
     System.out.println("Decrypt: " + decryptResult);
 
-    for (int i = 0; i < wheelOrder.length; i++) {
-      wheels[wheelOrder[i]].resetWheel();
-      if (i == 0) {
-        wheels[wheelOrder[i]].setFirstTurnWheel(true);
-      }
-      // System.out.print("Wheel: " + wheelOrder[i] + " " +
-      // wheels[wheelOrder[i]].getCurrentWheelPosition() + " ");
-    }
+    enigmaMachine.resetWheels();
   }
   // End test encryption above
 

@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.lang.StringBuilder;
 
 public class Plugboard {
 
@@ -10,7 +11,11 @@ public class Plugboard {
   }
 
   public void setNumberOfPlugs(int numberOfPlugs) {
-    this.numberOfPlugs = numberOfPlugs;
+    if (verifyNumberOfPlugs(numberOfPlugs)) {
+      this.numberOfPlugs = numberOfPlugs;
+    } else {
+      this.numberOfPlugs = 0;
+    }
   }
 
   public char[][] getConfiguration() {
@@ -22,13 +27,24 @@ public class Plugboard {
   }
 
   public Plugboard(int numberOfPlugs) {
-    this.numberOfPlugs = numberOfPlugs;
+    if (verifyNumberOfPlugs(numberOfPlugs)) {
+      this.numberOfPlugs = numberOfPlugs;
+    } else {
+      this.numberOfPlugs = 0;
+    }
     this.configuration = generatePlugConfiguration(numberOfPlugs);
   }
 
   @Override
   public String toString() {
-    return "Plugboard [numberOfPlugs=" + numberOfPlugs + ", configuration=" + configuration.toString() + "]";
+    StringBuilder configString = new StringBuilder();
+    for (int i = 0; i < configuration.length; i++) {
+      configString.append("[");
+      configString.append(configuration[i][0]);
+      configString.append(configuration[i][1]);
+      configString.append("] ");
+    }
+    return "Plugboard [numberOfPlugs=" + numberOfPlugs + ", configuration=" + configString + "]";
   }
 
   private char[][] generatePlugConfiguration(int numberOfPlugs) {
@@ -47,15 +63,18 @@ public class Plugboard {
       usedChars[i + numberOfPlugs] = configuration[i][1];
     }
 
-    // System.out.print("Plugboard: ");
-    // for (int i = 0; i < numberOfPlugs; i++){
-    // System.out.print(configuration[i][0] + "" + configuration[i][1] + " ");
-    // }
-    // System.out.println("");
-    // System.out.println(usedChars);
     return configuration;
   }
 
+  /**
+   * Returns a randomly generated character after verifying it is not already
+   * in usedChars; i.e.<!-- --> each character can only be used once.
+   * <p>
+   * Potentially never ending loop, though realistically unlikely.
+   *
+   * @param usedChars
+   * @return
+   */
   private char getRandomLetter(char[] usedChars) {
 
     char cipher = '_';
@@ -91,6 +110,14 @@ public class Plugboard {
     }
 
     return cipher;
+  }
+
+  private boolean verifyNumberOfPlugs(int numberOfPlugs) {
+    if (numberOfPlugs < 14) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public char checkPlugboard(char character) {

@@ -6,10 +6,9 @@ public class Enigma {
   private int numberOfWheels;
   private int[] wheelOrder;
   private Plugboard plugboard;
-  private int numberOfPlugs;
   private Wheel[] wheels;
   private Reflector reflector;
-  private Encrypt encryptor;
+  private Encryptor encryptor;
   private boolean allowSpecialCharacters = false;
 
   public int getNumberOfWheels() {
@@ -36,14 +35,6 @@ public class Enigma {
     this.plugboard = plugboard;
   }
 
-  public int getNumberOfPlugs() {
-    return numberOfPlugs;
-  }
-
-  public void setNumberOfPlugs(int numberOfPlugs) {
-    this.numberOfPlugs = numberOfPlugs;
-  }
-
   public Wheel[] getWheels() {
     return wheels;
   }
@@ -60,11 +51,11 @@ public class Enigma {
     this.reflector = reflector;
   }
 
-  public Encrypt getEncryptor() {
+  public Encryptor getEncryptor() {
     return encryptor;
   }
 
-  public void setEncryptor(Encrypt encryptor) {
+  public void setEncryptor(Encryptor encryptor) {
     this.encryptor = encryptor;
   }
 
@@ -79,22 +70,24 @@ public class Enigma {
   @Override
   public String toString() {
     return "Enigma [numberOfWheels=" + numberOfWheels + ", wheelOrder=" + Arrays.toString(wheelOrder) + ", plugboard="
-        + plugboard + ", numberOfPlugs=" + numberOfPlugs + ", wheels=" + Arrays.toString(wheels) + ", reflector="
+        + plugboard + "\nwheels=" + Arrays.toString(wheels) + "\n" + "reflector="
         + reflector + ", encryptor=" + encryptor + ", allowSpecialCharacters=" + allowSpecialCharacters + "]";
   }
 
-  public Enigma(int numberOfWheels, int[] wheelOrder, int numberOfPlugs) {
+  public Enigma(int numberOfWheels, int[] wheelOrder, int numberOfPlugs, boolean defaultEnigma) {
     this.numberOfWheels = numberOfWheels;
     this.wheelOrder = wheelOrder;
-
     this.plugboard = new Plugboard(numberOfPlugs);
     this.reflector = new Reflector();
-    this.encryptor = new Encrypt();
-
+    this.encryptor = new Encryptor();
     this.wheels = new Wheel[numberOfWheels];
 
-    for (int i = 0; i < numberOfWheels; i++) {
-      this.wheels[i] = new Wheel(0, 0);
+    if (defaultEnigma) {
+      for (int i = 0; i < numberOfWheels; i++) {
+        this.wheels[i] = new Wheel(0, 0, i, defaultEnigma);
+      }
+    } else {
+      // TODO: create non-standard wheels here
     }
     this.wheels[wheelOrder[0]].setFirstTurnWheel(true);
   }
@@ -120,15 +113,31 @@ public class Enigma {
 
         if (i != 0 && wheels[wheelOrder[i]].isFirstTurnWheel()) {
           wheels[wheelOrder[i]].setFirstTurnWheel(false);
-          if ((wheels[wheelOrder[i]].getRingPosition() == wheels[wheelOrder[i]].getCurrentWheelPosition())) {
-            wheels[wheelOrder[i]].setSecondTurnWheel(true); // If the last wheel turns, the next last wheel turns again
-                                                            // on the next input character
+
+          /*
+           * If any wheel other than the first turns, the preceeding wheel should
+           * turn with it. In reality this only impacts wheels between the first
+           * and last, because the first always turns and due to the mechanics,
+           * the last does not preceede a wheel.
+           *
+           */
+          if ((wheels[wheelOrder[i]].getRingPosition() == wheels[wheelOrder[i]].getCurrentWheelPosition())
+              && i != (wheelOrder.length - 1)) {
+            wheels[wheelOrder[i]].setSecondTurnWheel(true);
+
           }
         } else {
           wheels[wheelOrder[i]].setSecondTurnWheel(false);
         }
       }
     }
+    // System.out.println(Arrays.toString(wheels));
   }
 
+  protected void resetWheels() {
+    for (int num : wheelOrder) {
+      this.wheels[num].resetWheel();
+    }
+    this.wheels[wheelOrder[0]].setFirstTurnWheel(true);
+  }
 }
