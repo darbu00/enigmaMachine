@@ -81,8 +81,9 @@ public class Wheel {
 
   @Override
   public String toString() {
-    return "Wheel [startOffset=" + startOffset + ", currentWheelPosition=" + currentWheelPosition + ", ringPosition="
-        + ringPosition + "]\n" +
+    return "Wheel [startOffset=" + numToChar(startOffset) +
+        ", currentWheelPosition=" + numToChar(currentWheelPosition) +
+        ", ringPosition=" + numToChar(ringPosition) + "]\n" +
         "cipher= " + Arrays.toString(cipher) + "\n";
   }
 
@@ -171,6 +172,10 @@ public class Wheel {
       }
     }
     return cipher;
+  }
+
+  private char numToChar(int number) {
+    return (char) (number + 65);
   }
 
   public void resetWheel() {
