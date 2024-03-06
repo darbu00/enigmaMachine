@@ -1,0 +1,18 @@
+1. Finish encryption/decryption option
+  1. Encrypt char is done but can be improved.
+  2. Encrypt message method added but not finished
+  3. Need to add method/option to encrypt from keyboard input
+
+
+...
+n. Add gui
+
+
+1 create -- complete
+2 configure -- complete (?)
+3 load
+4 save
+5 encrypt/decrypt
+6 display -- complete
+
+7 exit -- complete

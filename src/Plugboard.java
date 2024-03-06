@@ -49,12 +49,13 @@ public class Plugboard {
 
   private char[][] generatePlugConfiguration(int numberOfPlugs) {
 
+    if (numberOfPlugs == 0) {
+      char[][] charArray = new char[0][0];
+      return charArray;
+    }
+
     char[][] configuration = new char[numberOfPlugs][2];
     char[] usedChars = new char[numberOfPlugs * 2];
-
-    if (numberOfPlugs == 0) {
-      return configuration;
-    }
 
     for (int i = 0; i < numberOfPlugs; i++) {
       configuration[i][0] = getRandomLetter(usedChars);

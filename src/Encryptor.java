@@ -43,4 +43,9 @@ public class Encryptor {
 
   }
 
+  public String encryptMessage(StringBuffer inputMessage, Enigma enigma) {
+
+    return "";
+  }
+
 }

@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 
 public class Enigma {
 
@@ -93,6 +95,33 @@ public class Enigma {
       }
     }
     this.wheels[wheelOrder[0]].setFirstTurnWheel(true);
+  }
+
+  public Enigma(int numberOfWheels, int numberOfDefaultWheels, Set<Integer> wheelOrder) {
+    this.numberOfWheels = numberOfWheels;
+    this.wheelOrder = new int[wheelOrder.size()];
+    int index = 0;
+    for (int i : wheelOrder) {
+      this.wheelOrder[index] = i;
+      index++;
+    }
+    this.plugboard = new Plugboard(0);
+    this.reflector = new Reflector();
+    this.encryptor = new Encryptor();
+    this.wheels = new Wheel[numberOfWheels];
+    if (numberOfDefaultWheels > 0) {
+      for (int i = 0; i < numberOfDefaultWheels; i++) {
+        this.wheels[i] = new Wheel(0, 0, i, true);
+      }
+      for (int i = numberOfDefaultWheels; i < numberOfWheels; i++) {
+        this.wheels[i] = new Wheel(0, 0);
+      }
+    } else {
+      for (int i = numberOfDefaultWheels; i < numberOfWheels; i++) {
+        this.wheels[i] = new Wheel(0, 0);
+      }
+    }
+    this.wheels[this.wheelOrder[0]].setFirstTurnWheel(true);
   }
 
   public static void turnWheels(Wheel[] wheels, int[] wheelOrder) {
