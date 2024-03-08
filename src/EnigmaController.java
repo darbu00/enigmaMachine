@@ -595,17 +595,58 @@ public class EnigmaController {
     }
     return randomSet;
   }
+  // End test encryption above
+
+  // This method probably belongs in Encryptor (or Enigma)
+  public static void turnWheels(Wheel[] wheels, int[] wheelOrder) {
+
+    for (int i = 0; i < wheelOrder.length; i++) {
+      if (wheels[wheelOrder[i]].getCurrentWheelPosition() == wheels[wheelOrder[i]].getRingPosition()) {
+        if (i != (wheelOrder.length - 1)) {
+          wheels[wheelOrder[i + 1]].setFirstTurnWheel(true);
+        }
+      }
+    }
+
+    for (int i = 0; i < wheelOrder.length; i++) {
+      if (wheels[wheelOrder[i]].isFirstTurnWheel() || wheels[wheelOrder[i]].isSecondTurnWheel()) {
+
+        if (wheels[wheelOrder[i]].getCurrentWheelPosition() < 25) {
+          wheels[wheelOrder[i]].setCurrentWheelPosition(wheels[wheelOrder[i]].getCurrentWheelPosition() + 1);
+        } else {
+          wheels[wheelOrder[i]].setCurrentWheelPosition(0);
+        }
+
+        if (i != 0 && wheels[wheelOrder[i]].isFirstTurnWheel()) {
+          wheels[wheelOrder[i]].setFirstTurnWheel(false);
+          if ((wheels[wheelOrder[i]].getRingPosition() == wheels[wheelOrder[i]].getCurrentWheelPosition())) {
+            wheels[wheelOrder[i]].setSecondTurnWheel(true); // If the last wheel turns, the next last wheel turns again
+                                                            // on the next input character
+          }
+        } else {
+          wheels[wheelOrder[i]].setSecondTurnWheel(false);
+        }
+      }
+    }
+  }
+
+  public void clearScreen() {
+    System.out.print("\033[H\033[2J");
+    System.out.flush();
+  }
 
   // This is a test encryption
+  // TO-DO Change to accept a Enigma and message only as parameters.
+
   public void testEncryption(Plugboard plugboard, Wheel[] wheels, Reflector reflector, Encryptor encryptor,
-      int[] wheelOrder, ArrayList<String> inputString) {
+      int[] wheelOrder, ArrayList<String> messageString) {
 
-    String testString = "this is my crazy long test message to the Allied commmand asking about Dday.  AAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    String testString = "this is my crazy long test message to the Allied commmand asking about DdayAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
-    if (inputString != null) {
+    if (messageString != null) {
       StringBuilder testStringBuilder = new StringBuilder();
-      for (int i = 0; i < inputString.size(); i++) {
-        testStringBuilder.append(inputString.get(i));
+      for (int i = 0; i < messageString.size(); i++) {
+        testStringBuilder.append(messageString.get(i));
         testStringBuilder.append("\n");
       }
       testString = testStringBuilder.toString();
@@ -616,7 +657,6 @@ public class EnigmaController {
     for (char testChar : testString.toCharArray()) {
 
       Enigma.turnWheels(wheels, wheelOrder);
-
       char character = Character.toUpperCase(testChar);
 
       character = plugboard.checkPlugboard(character);
@@ -654,9 +694,8 @@ public class EnigmaController {
 
     StringBuilder decryptResult = new StringBuilder();
     for (char dtestChar : resultChar) {
-      char character = dtestChar;
-
       Enigma.turnWheels(wheels, wheelOrder);
+      char character = dtestChar;
 
       character = plugboard.checkPlugboard(character);
 
@@ -674,51 +713,44 @@ public class EnigmaController {
 
       decryptResult.append(character);
       // System.out.print(character);
+
     }
     System.out.println("Decrypt:\n" + decryptResult + "\n");
+
+    // test new method
+    //
+    // System.out.println(enigmaMachine.toString());
+    enigmaMachine.resetWheels();
+    enigmaMachine.setAllowSpecialCharacters(false);
+    // System.out.print(enigmaMachine.toString());
+
+    System.out.println("New method:");
+    StringBuilder methodEncrypt = enigmaMachine.getEncryptor().encryptMessage(new StringBuilder(testString),
+        enigmaMachine);
+    System.out.println(methodEncrypt);
+    for (int i = 0; i < methodEncrypt.length(); i++) {
+      if (methodEncrypt.charAt((i)) != '\000') {
+        System.out.print(methodEncrypt.charAt(i));
+      }
+    }
+    System.out.println();
+    enigmaMachine.resetWheels();
+    StringBuilder methodDecrypt = enigmaMachine.getEncryptor().encryptMessage(new StringBuilder(methodEncrypt),
+        enigmaMachine);
+    System.out.println(methodDecrypt.toString());
+
+    System.out
+        .println("Test:" + testString.length() + "TestEn:" + resultChar.length + " En: " + methodEncrypt.length()
+            + " De:" + methodDecrypt.length());
+
     System.out.print("Press ENTER to continue...");
     kbScanner.nextLine();
     kbScanner.nextLine();
     enigmaMachine.resetWheels();
-  }
-  // End test encryption above
 
-  // This method probably belongs in Encryptor (or Enigma)
-  public static void turnWheels(Wheel[] wheels, int[] wheelOrder) {
-
-    for (int i = 0; i < wheelOrder.length; i++) {
-      if (wheels[wheelOrder[i]].getCurrentWheelPosition() == wheels[wheelOrder[i]].getRingPosition()) {
-        if (i != (wheelOrder.length - 1)) {
-          wheels[wheelOrder[i + 1]].setFirstTurnWheel(true);
-        }
-      }
-    }
-
-    for (int i = 0; i < wheelOrder.length; i++) {
-      if (wheels[wheelOrder[i]].isFirstTurnWheel() || wheels[wheelOrder[i]].isSecondTurnWheel()) {
-
-        if (wheels[wheelOrder[i]].getCurrentWheelPosition() < 25) {
-          wheels[wheelOrder[i]].setCurrentWheelPosition(wheels[wheelOrder[i]].getCurrentWheelPosition() + 1);
-        } else {
-          wheels[wheelOrder[i]].setCurrentWheelPosition(0);
-        }
-
-        if (i != 0 && wheels[wheelOrder[i]].isFirstTurnWheel()) {
-          wheels[wheelOrder[i]].setFirstTurnWheel(false);
-          if ((wheels[wheelOrder[i]].getRingPosition() == wheels[wheelOrder[i]].getCurrentWheelPosition())) {
-            wheels[wheelOrder[i]].setSecondTurnWheel(true); // If the last wheel turns, the next last wheel turns again
-                                                            // on the next input character
-          }
-        } else {
-          wheels[wheelOrder[i]].setSecondTurnWheel(false);
-        }
-      }
-    }
   }
 
   // convert encryption to a method here
-  public void clearScreen() {
-    System.out.print("\033[H\033[2J");
-    System.out.flush();
-  }
+  //
+
 }

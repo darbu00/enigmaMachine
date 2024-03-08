@@ -43,9 +43,77 @@ public class Encryptor {
 
   }
 
-  public String encryptMessage(StringBuffer inputMessage, Enigma enigma) {
+  public StringBuilder encryptMessage(StringBuilder inputMessage, Enigma enigmaMachine) {
+    StringBuilder encryptedMessage = new StringBuilder();
+    char encryptedChar = 0;
+    char emptyChar = 0;
+    if (enigmaMachine == null || inputMessage.length() < 1) {
+      return encryptedMessage;
+    }
 
-    return "";
+    for (int i = 0; i < inputMessage.length(); i++) {
+      char inputChar = Character.toUpperCase(inputMessage.charAt(i));
+      enigmaMachine.turnWheels(enigmaMachine.getWheels(), enigmaMachine.getWheelOrder());
+
+      encryptedChar = 0;
+
+      if (Character.isDigit(inputChar)) {
+        String digitWord = digitToWord(inputChar);
+        for (int j = 0; j < digitWord.toCharArray().length; j++) {
+          encryptedChar = encryptChar(digitWord.toCharArray()[j], enigmaMachine);
+          encryptedMessage.append(encryptedChar);
+          if (j < digitWord.toCharArray().length - 1) {
+            enigmaMachine.turnWheels(enigmaMachine.getWheels(), enigmaMachine.getWheelOrder());
+          }
+        }
+        if (enigmaMachine.isAllowSpecialCharacters()) {
+          encryptedMessage.append(' ');
+        } else {
+          encryptedMessage.append(emptyChar);
+        }
+
+      } else if ((int) inputChar >= 65 && (int) inputChar <= 90) {
+        encryptedChar = encryptChar(inputChar, enigmaMachine);
+        encryptedMessage.append(encryptedChar);
+
+      } else if (!enigmaMachine.isAllowSpecialCharacters()) {
+        if (inputChar == ' ') {
+          encryptedMessage.append(emptyChar);
+        }
+
+      } else {
+        encryptedMessage.append(inputChar);
+      }
+    }
+    // System.out.println("After encryption:");
+    // System.out.println(enigmaMachine.toString());
+
+    return encryptedMessage;
+  }
+
+  public char encryptChar(char inputChar, Enigma enigmaMachine) {
+    char encryptedChar = ' ';
+
+    encryptedChar = enigmaMachine.getPlugboard().checkPlugboard(inputChar);
+    for (int i = 0; i < enigmaMachine.getWheelOrder().length; i++) {
+      encryptedChar = encryptChar(true, enigmaMachine.getWheels()[enigmaMachine.getWheelOrder()[i]], encryptedChar);
+    }
+
+    encryptedChar = enigmaMachine.getReflector().reflectChar(encryptedChar);
+
+    for (int i = enigmaMachine.getWheelOrder().length - 1; i >= 0; i--) {
+      encryptedChar = encryptChar(false, enigmaMachine.getWheels()[enigmaMachine.getWheelOrder()[i]], encryptedChar);
+    }
+
+    encryptedChar = enigmaMachine.getPlugboard().checkPlugboard(encryptedChar);
+
+    return encryptedChar;
+  }
+
+  private String digitToWord(char c) {
+    String[] digitWords = { "ZERO", "ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE" };
+
+    return digitWords[Character.getNumericValue(c)];
   }
 
 }

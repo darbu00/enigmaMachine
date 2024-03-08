@@ -2,7 +2,8 @@
   1. Encrypt char is done but can be improved.
   2. Encrypt message method added but not finished
   3. Need to add method/option to encrypt from keyboard input
-
+  4. Should convert digits (0-9) to words (zero - nine) for encryption
+  5. Should convert spaces to a predefined character set; i.e. <space> = QZ
 
 ...
 n. Add gui
