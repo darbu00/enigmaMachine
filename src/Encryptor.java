@@ -43,10 +43,10 @@ public class Encryptor {
 
   }
 
-  public StringBuilder encryptMessage(StringBuilder inputMessage, Enigma enigmaMachine) {
-    StringBuilder encryptedMessage = new StringBuilder();
+  public ArrayList<Character> encryptMessage(StringBuilder inputMessage, Enigma enigmaMachine) {
+    ArrayList<Character> encryptedMessage = new ArrayList<Character>();
     char encryptedChar = 0;
-    char emptyChar = 0;
+    char emptyChar = '\u200B'; // This is a unicode empty space character
     if (enigmaMachine == null || inputMessage.length() < 1) {
       return encryptedMessage;
     }
@@ -61,28 +61,37 @@ public class Encryptor {
         String digitWord = digitToWord(inputChar);
         for (int j = 0; j < digitWord.toCharArray().length; j++) {
           encryptedChar = encryptChar(digitWord.toCharArray()[j], enigmaMachine);
-          encryptedMessage.append(encryptedChar);
+          encryptedMessage.add(encryptedChar);
           if (j < digitWord.toCharArray().length - 1) {
             enigmaMachine.turnWheels(enigmaMachine.getWheels(), enigmaMachine.getWheelOrder());
           }
         }
-        if (enigmaMachine.isAllowSpecialCharacters()) {
-          encryptedMessage.append(' ');
-        } else {
-          encryptedMessage.append(emptyChar);
+        if (inputMessage.charAt(i + 1) != ' ') {
+          enigmaMachine.turnWheels(enigmaMachine.getWheels(), enigmaMachine.getWheelOrder());
+          if (enigmaMachine.isAllowSpecialCharacters()) {
+            encryptedMessage.add(' ');
+          } else {
+            encryptedMessage.add(emptyChar);
+          }
+
         }
 
       } else if ((int) inputChar >= 65 && (int) inputChar <= 90) {
         encryptedChar = encryptChar(inputChar, enigmaMachine);
-        encryptedMessage.append(encryptedChar);
+        encryptedMessage.add(encryptedChar);
 
       } else if (!enigmaMachine.isAllowSpecialCharacters()) {
         if (inputChar == ' ') {
-          encryptedMessage.append(emptyChar);
-        }
+          encryptedMessage.add(emptyChar);
+        } else if (inputChar == emptyChar) {
+          encryptedMessage.add(' ');
+        } else {
+          encryptedMessage.add('.');
+        } // TODO still have problem of what to do with special characters other than
+          // spaces
 
       } else {
-        encryptedMessage.append(inputChar);
+        encryptedMessage.add(inputChar);
       }
     }
     // System.out.println("After encryption:");

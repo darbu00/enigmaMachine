@@ -641,7 +641,13 @@ public class EnigmaController {
   public void testEncryption(Plugboard plugboard, Wheel[] wheels, Reflector reflector, Encryptor encryptor,
       int[] wheelOrder, ArrayList<String> messageString) {
 
-    String testString = "this is my crazy long test message to the Allied commmand asking about DdayAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    // String testString = "this is my crazy long test message to the Allied
+    // commmand asking about DdayAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    String testString = """
+        8 Mar 2024 320 aaa aaa
+        99 999 $#Thisis a test.  Going to try to see how this works.
+        It may/not depending how the system reacts to this message.
+        But we will give it a go, I guess.""";
 
     if (messageString != null) {
       StringBuilder testStringBuilder = new StringBuilder();
@@ -652,96 +658,65 @@ public class EnigmaController {
       testString = testStringBuilder.toString();
     }
 
-    char[] resultChar = new char[testString.toCharArray().length];
-    int index = 0;
-    for (char testChar : testString.toCharArray()) {
-
-      Enigma.turnWheels(wheels, wheelOrder);
-      char character = Character.toUpperCase(testChar);
-
-      character = plugboard.checkPlugboard(character);
-
-      for (int i = 0; i < wheelOrder.length; i++) {
-        character = encryptor.encryptChar(true, wheels[wheelOrder[i]], character);
-      }
-      // System.out.print(character);
-
-      character = reflector.reflectChar(character);
-
-      for (int i = (wheelOrder.length - 1); i >= 0; i--) {
-        character = encryptor.encryptChar(false, wheels[wheelOrder[i]], character);
-      }
-      // System.out.println(character);
-
-      character = plugboard.checkPlugboard(character);
-
-      resultChar[index] = character;
-      // System.out.println(" Index: " + index);
-      index++;
-
-    }
-    clearScreen();
-    System.out.println(testString);
-    System.out.println(testString.toUpperCase());
-    System.out.println("Encrypt: ");
-    for (char result : resultChar) {
-      System.out.print(result);
-    }
-    System.out.println("");
-
-    // Start test decryption
-    enigmaMachine.resetWheels();
-
-    StringBuilder decryptResult = new StringBuilder();
-    for (char dtestChar : resultChar) {
-      Enigma.turnWheels(wheels, wheelOrder);
-      char character = dtestChar;
-
-      character = plugboard.checkPlugboard(character);
-
-      for (int i = 0; i < wheelOrder.length; i++) {
-        character = encryptor.encryptChar(true, wheels[wheelOrder[i]], character);
-      }
-
-      character = reflector.reflectChar(character);
-
-      for (int i = (wheelOrder.length - 1); i >= 0; i--) {
-        character = encryptor.encryptChar(false, wheels[wheelOrder[i]], character);
-      }
-
-      character = plugboard.checkPlugboard(character);
-
-      decryptResult.append(character);
-      // System.out.print(character);
-
-    }
-    System.out.println("Decrypt:\n" + decryptResult + "\n");
-
     // test new method
     //
     // System.out.println(enigmaMachine.toString());
     enigmaMachine.resetWheels();
     enigmaMachine.setAllowSpecialCharacters(false);
-    // System.out.print(enigmaMachine.toString());
 
     System.out.println("New method:");
-    StringBuilder methodEncrypt = enigmaMachine.getEncryptor().encryptMessage(new StringBuilder(testString),
+    ArrayList<Character> methodEncrypt = enigmaMachine.getEncryptor().encryptMessage(new StringBuilder(testString),
         enigmaMachine);
     System.out.println(methodEncrypt);
-    for (int i = 0; i < methodEncrypt.length(); i++) {
-      if (methodEncrypt.charAt((i)) != '\000') {
-        System.out.print(methodEncrypt.charAt(i));
+    for (int i = 0; i < methodEncrypt.size(); i++) {
+      if (methodEncrypt.get(i) != '\000') {
+        System.out.print(methodEncrypt.get(i));
       }
     }
     System.out.println();
+
+    EnigmaWriter.writeEncryptedMessage(methodEncrypt);
+
+    System.out.println();
     enigmaMachine.resetWheels();
-    StringBuilder methodDecrypt = enigmaMachine.getEncryptor().encryptMessage(new StringBuilder(methodEncrypt),
+
+    StringBuilder decryptMessage = new StringBuilder();
+    for (int i = 0; i < methodEncrypt.size(); i++) {
+      decryptMessage.append(methodEncrypt.get(i));
+    }
+
+    ArrayList<Character> methodDecrypt = enigmaMachine.getEncryptor().encryptMessage(decryptMessage,
         enigmaMachine);
     System.out.println(methodDecrypt.toString());
 
     System.out
-        .println("Test:" + testString.length() + "TestEn:" + resultChar.length + " En: " + methodEncrypt.length()
-            + " De:" + methodDecrypt.length());
+        .println("Test:" + testString.length() + " En: " + methodEncrypt.size()
+            + " De:" + methodDecrypt.size());
+
+    // Test enigmaReader here
+    ArrayList<String> readFile = new ArrayList<String>();
+    try {
+      readFile = EnigmaReader.readFile(null);
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+    if (!readFile.isEmpty()) {
+      System.out.println("File contents:\n" + readFile.toString() + "\n");
+    }
+
+    decryptMessage = new StringBuilder();
+
+    for (char c : readFile.get(0).toCharArray()) {
+      decryptMessage.append(c);
+    }
+    enigmaMachine.resetWheels();
+    methodDecrypt = enigmaMachine.getEncryptor().encryptMessage(decryptMessage, enigmaMachine);
+    for (int i = 0; i < methodDecrypt.size(); i++) {
+      System.out.print(methodDecrypt.get(i));
+    }
+    System.out.println();
 
     System.out.print("Press ENTER to continue...");
     kbScanner.nextLine();
