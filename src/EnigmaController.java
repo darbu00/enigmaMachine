@@ -190,9 +190,6 @@ public class EnigmaController {
             System.out.println(lineContent);
           }
 
-          testEncryption(enigmaMachine.getPlugboard(), enigmaMachine.getWheels(), enigmaMachine.getReflector(),
-              enigmaMachine.getEncryptor(), enigmaMachine.getWheelOrder(), fileContent);
-
           enigmaState = ENIGMA_STATE.DISPLAY_MENU;
           break;
 
@@ -218,8 +215,7 @@ public class EnigmaController {
 
         case ENCRYPT:
           if (enigmaMachine != null) {
-            testEncryption(enigmaMachine.getPlugboard(), enigmaMachine.getWheels(), enigmaMachine.getReflector(),
-                enigmaMachine.getEncryptor(), enigmaMachine.getWheelOrder(), null);
+            testEncryption(enigmaMachine, null);
             enigmaState = ENIGMA_STATE.DISPLAY_MENU;
           } else {
             System.out.println("\n\nYOU HAVE NOT GENERATED AN ENIGMA MACHINE YET!!\n");
@@ -638,17 +634,11 @@ public class EnigmaController {
   // This is a test encryption
   // TO-DO Change to accept a Enigma and message only as parameters.
 
-  public void testEncryption(Plugboard plugboard, Wheel[] wheels, Reflector reflector, Encryptor encryptor,
-      int[] wheelOrder, ArrayList<String> messageString) {
+  public void testEncryption(Enigma enigmaMachine, ArrayList<String> messageString) {
 
     // String testString = "this is my crazy long test message to the Allied
     // commmand asking about DdayAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-    String testString = """
-        8 Mar 2024 320 aaa aaa
-        99 999 $#Thisis a test.  Going to try to see how this works.
-        It may/not depending how the system reacts to this message.
-        But we will give it a go, I guess.""";
-
+    String testString = new String();
     if (messageString != null) {
       StringBuilder testStringBuilder = new StringBuilder();
       for (int i = 0; i < messageString.size(); i++) {
@@ -656,6 +646,13 @@ public class EnigmaController {
         testStringBuilder.append("\n");
       }
       testString = testStringBuilder.toString();
+    } else {
+      testString = """
+          8 Mar 2024 320 aaa aaa
+          99 999 $#Thisis a test.  Going to try to see how this works.
+          It may/not depending how the system reacts to this message.
+          But we will give it a go, I guess.""";
+
     }
 
     // test new method

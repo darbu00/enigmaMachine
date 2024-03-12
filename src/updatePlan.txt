@@ -1,9 +1,9 @@
 1. Finish encryption/decryption option
   1. Encrypt char is done but can be improved.
-  2. Encrypt message method added but not finished
+  2. Encrypt message method added but not finished -- I think this is now complete, but imporavable.
   3. Need to add method/option to encrypt from keyboard input
-  4. Should convert digits (0-9) to words (zero - nine) for encryption
-  5. Should convert spaces to a predefined character set; i.e. <space> = QZ
+  4. Should convert digits (0-9) to words (zero - nine) for encryption -- complete
+  5. Should convert spaces to a predefined character set; i.e. <space> = QZ -- complete, space saves as u200B (empty space)
 
 ...
 n. Add gui
@@ -11,9 +11,9 @@ n. Add gui
 
 1 create -- complete
 2 configure -- complete (?)
-3 load
-4 save
-5 encrypt/decrypt
+3 load -- reader method done, loading of saves not yet done.
+4 save -- writer method done, saving data not yet really complete though test saves are working
+5 encrypt/decrypt -- nearly complete
 6 display -- complete
 
 7 exit -- complete
