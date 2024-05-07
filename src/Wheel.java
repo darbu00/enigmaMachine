@@ -1,4 +1,8 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Wheel {
 
@@ -116,44 +120,26 @@ public class Wheel {
 
   private char[] generateCipher() {
 
+    char[] ALPHABET = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
+        'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+
     char[] cipher = new char[26];
+    ArrayList<Character> alphaList = new ArrayList<Character>(26);
+    int maxRandom = 25;
+    int randValue;
 
-    int iterations = 0;
-
-    int minValue = 65;
-    int maxRandom = 26;
-
-    for (int i = 0; i <= 25; i++) {
-
-      int currentValue;
-      char currentChar;
-      boolean isUsed = true;
-
-      while (isUsed) {
-        currentValue = (int) ((maxRandom * Math.random()) + minValue);
-        currentChar = (char) currentValue;
-
-        iterations++;
-
-        boolean valueFound = false;
-
-        for (int j = 0; j <= i; j++) {
-          if (currentChar == cipher[j]) {
-            valueFound = true;
-          }
-        }
-
-        if (valueFound == false) {
-          cipher[i] = currentChar;
-          isUsed = false;
-
-          if (minValue == currentValue) {
-            minValue++;
-            maxRandom--;
-          }
-        }
-      }
+    for (char c : ALPHABET) {
+      alphaList.add(c);
     }
+
+    for (int i = 0; i < ALPHABET.length - 1; i++) {
+      randValue = (int) ((maxRandom * Math.random()));
+      cipher[i] = alphaList.get(randValue);
+      alphaList.remove(randValue);
+      maxRandom--;
+    }
+
+    cipher[ALPHABET.length - 1] = alphaList.get(0);
 
     return cipher;
   }

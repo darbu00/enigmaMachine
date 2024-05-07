@@ -401,7 +401,7 @@ public class EnigmaController {
     return validSelections;
   }
 
-  private void createCustomEnigma(boolean hybrid) {
+  public void createCustomEnigma(boolean hybrid) {
     int numberOfWheels = 0;
     int numberOfDefaultWheels = 0;
     int numberOfUsedWheels = 0;
@@ -584,6 +584,20 @@ public class EnigmaController {
     kbScanner.nextLine();
   }
 
+  private Set<Integer> setWheelOrder(Enigma enigmaMachine) {
+    Set<Integer> wheelOrderSet = new LinkedHashSet<Integer>();
+    return wheelOrderSet;
+  }
+
+  private void setWheelStartPosition() {
+  }
+
+  private void setWheelRingPosition() {
+  }
+
+  private void setPlugboardConfiguration() {
+  }
+
   private Set<Integer> setRandomWheelOrder(int numberOfWheels, int numberOfUsedWheels) {
     Set<Integer> randomSet = new LinkedHashSet<Integer>();
     while (randomSet.size() < numberOfUsedWheels) {
@@ -647,12 +661,13 @@ public class EnigmaController {
       }
       testString = testStringBuilder.toString();
     } else {
+
+      testString = "8Mar2024 320 aaa aaa";
       testString = """
-          8 Mar 2024 320 aaa aaa
-          99 999 $#Thisis a test.  Going to try to see how this works.
+          8Mar2024 320 aaa aaa
+          99 999 $#Thisis a test. Going to try to see how this works.
           It may/not depending how the system reacts to this message.
           But we will give it a go, I guess.""";
-
     }
 
     // test new method
@@ -660,10 +675,10 @@ public class EnigmaController {
     // System.out.println(enigmaMachine.toString());
     enigmaMachine.resetWheels();
     enigmaMachine.setAllowSpecialCharacters(false);
-
+    boolean hiddenSpaces = true;
     System.out.println("New method:");
     ArrayList<Character> methodEncrypt = enigmaMachine.getEncryptor().encryptMessage(new StringBuilder(testString),
-        enigmaMachine);
+        enigmaMachine, hiddenSpaces);
     System.out.println(methodEncrypt);
     for (int i = 0; i < methodEncrypt.size(); i++) {
       if (methodEncrypt.get(i) != '\000') {
@@ -683,7 +698,7 @@ public class EnigmaController {
     }
 
     ArrayList<Character> methodDecrypt = enigmaMachine.getEncryptor().encryptMessage(decryptMessage,
-        enigmaMachine);
+        enigmaMachine, hiddenSpaces);
     System.out.println(methodDecrypt.toString());
 
     System.out
@@ -705,11 +720,14 @@ public class EnigmaController {
 
     decryptMessage = new StringBuilder();
 
-    for (char c : readFile.get(0).toCharArray()) {
-      decryptMessage.append(c);
+    for (int i = 0; i < readFile.size(); i++) {
+      for (char c : readFile.get(i).toCharArray()) {
+        decryptMessage.append(c);
+      }
     }
+
     enigmaMachine.resetWheels();
-    methodDecrypt = enigmaMachine.getEncryptor().encryptMessage(decryptMessage, enigmaMachine);
+    methodDecrypt = enigmaMachine.getEncryptor().encryptMessage(decryptMessage, enigmaMachine, hiddenSpaces);
     for (int i = 0; i < methodDecrypt.size(); i++) {
       System.out.print(methodDecrypt.get(i));
     }

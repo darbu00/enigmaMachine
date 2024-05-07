@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class EnigmaWriter {
   public static void writeEncryptedMessage(ArrayList<Character> encryptedMessage) {
     String fileName = "/Users/Shared/enigmaTestFile.txt";
-
     try {
       BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName));
 
@@ -16,7 +15,7 @@ public class EnigmaWriter {
           bufferedWriter.append(encryptedMessage.get(i));
         }
       }
-
+      bufferedWriter.flush();
       bufferedWriter.close();
 
       // byte[] encryptedBytes = new byte[encryptedMessage.size()];

@@ -124,7 +124,7 @@ public class Enigma {
     this.wheels[this.wheelOrder[0]].setFirstTurnWheel(true);
   }
 
-  public static void turnWheels(Wheel[] wheels, int[] wheelOrder) {
+  public void turnWheels(Wheel[] wheels, int[] wheelOrder) {
 
     for (int i = 0; i < wheelOrder.length; i++) {
       if (wheels[wheelOrder[i]].getCurrentWheelPosition() == wheels[wheelOrder[i]].getRingPosition()) {
@@ -145,7 +145,6 @@ public class Enigma {
 
         if (i != 0 && wheels[wheelOrder[i]].isFirstTurnWheel()) {
           wheels[wheelOrder[i]].setFirstTurnWheel(false);
-
           /*
            * If any wheel other than the first turns, the preceeding wheel should
            * turn with it. In reality this only impacts wheels between the first

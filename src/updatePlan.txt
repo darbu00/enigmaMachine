@@ -1,16 +1,18 @@
 1. Finish encryption/decryption option
   1. Encrypt char is done but can be improved.
-  2. Encrypt message method added but not finished -- I think this is now complete, but imporavable.
+  2. Encrypt message method added but not finished -- I think this is now complete, but improvable.
   3. Need to add method/option to encrypt from keyboard input
   4. Should convert digits (0-9) to words (zero - nine) for encryption -- complete
-  5. Should convert spaces to a predefined character set; i.e. <space> = QZ -- complete, space saves as u200B (empty space)
-
+  5. Should convert spaces to a predefined character set; i.e. <space> = QZ -- partially complete
+      Space saves as u200B (empty space) if hiddenSpaces = true
+      Needs improvement
+  6. Move allowSpecialCharacters and hiddenSpaces to Encryptor
 ...
 n. Add gui
 
-
+MENU STRUCTURE
 1 create -- complete
-2 configure -- complete (?)
+2 settings
 3 load -- reader method done, loading of saves not yet done.
 4 save -- writer method done, saving data not yet really complete though test saves are working
 5 encrypt/decrypt -- nearly complete

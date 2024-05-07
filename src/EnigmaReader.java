@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class EnigmaReader {
 
-  public static ArrayList<String> readFile(String fileName) throws Exception {
+  public ArrayList<String> readFile(String fileName) throws Exception {
 
     fileName = "/Users/Shared/enigmaTestFile.txt";
     File file = new File(fileName);
@@ -22,13 +22,11 @@ public class EnigmaReader {
 
     ArrayList<String> fileLine = new ArrayList<String>();
     String nextLine = new String();
-    int lineNumber = 0;
 
     while ((nextLine = bufferedReader.readLine()) != null) {
       // process the line
       fileLine.add(nextLine);
-      // System.out.println(fileLine);
-      lineNumber++;
+      fileLine.add("\n");
     }
 
     bufferedReader.close();
